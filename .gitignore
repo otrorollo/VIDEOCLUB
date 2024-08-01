@@ -1,0 +1,5 @@
+myvenv/
+.vscode/
+#variables en entorno
+**__pycache__/
+
