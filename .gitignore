@@ -2,4 +2,4 @@ myvenv/
 .vscode/
 #variables en entorno
 **__pycache__/
-
+.pytest_cache/
