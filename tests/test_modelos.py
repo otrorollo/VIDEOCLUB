@@ -59,10 +59,16 @@ def test_asigna_director_a_pelicula():
     assert pelicula.director == director
     assert pelicula._id_director == 9
 
+
 def test_dao_peliculas_traer_todos():
     dao = DAO_CSV_Pelicula("tests/data/peliculas.csv")
     peliculas = dao.todos()
 
     assert len(peliculas) == 5
 
-    assert peliculas[1] == Pelicula("Los siete samuráis", "Una banda de forajidos atemorizan a los habitantes de un pequeño pueblo, saqueándolos periódicamente sin piedad. Para repeler estos ataques, los aldeanos deciden contratar a mercenarios. Finalmente, consiguen los servicios de 7 guerreros, 7 samurais dispuestos a defenderlos a cambio, tan solo, de cobijo y comida.", 2, 17 )
+    assert peliculas[1] == Pelicula(
+        "Los siete samuráis",
+        "Una banda de forajidos atemorizan a los habitantes de un pequeño pueblo, saqueándolos periódicamente sin piedad. Para repeler estos ataques, los aldeanos deciden contratar a mercenarios. Finalmente, consiguen los servicios de 7 guerreros, 7 samurais dispuestos a defenderlos a cambio, tan solo, de cobijo y comida.",
+        2,
+        17,
+    )
