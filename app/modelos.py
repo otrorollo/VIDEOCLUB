@@ -1,6 +1,11 @@
 from abc import ABC, abstractmethod
 import csv
 
+class Model(ABC): #SE CREA LA INTERFAZ - HEREDA DE CLASE ABSTRACTA ABC
+    @classmethod
+    @abstractmethod #EL ORDEN AL PARECER ES IMPORTANTE, DEBE IR DEBAJO DE CLASSMETHOD PARA QUE NO DE ERROR DE PYTEST
+    def create_from_dict(cls, diccionario):
+        pass
 
 class Director:
     @classmethod
@@ -21,7 +26,6 @@ class Director:
 
     def __hash__(self):
         return hash((self.id, self.nombre))
-
 class Pelicula:
     @classmethod
     def create_from_dict(cls, diccionario):
@@ -66,7 +70,6 @@ class Pelicula:
 
     def __repr__(self):
         return f"Pelicula ({self.id}): {self.titulo}, {self.director}"
-
 class DAO(ABC):
     """
     #def __init__(self, *args)
@@ -93,23 +96,34 @@ class DAO(ABC):
         pass
         # raise NotImplementedError("No se debe usar DAO, es una interfaz")
 class DAO_CSV(DAO):  # ESTO SE HA QUITADO DE LAS SIGUIENTES CLASS 2 DE ABAJO
-    def __init__(self, path: str):
+    model = None 
+    def __init__(self, path: str, encoding="utf-8"):
         self.path = path
-
-class DAO_CSV_Director(DAO_CSV):
+        self.encoding = encoding
     def todos(self):
+        # with open("data/directores.csv","r", newline= "") as fichero:
+        with open(self.path, "r", encoding=self.encoding, newline="") as fichero:
+            lector_csv = csv.DictReader(fichero, delimiter=";", quotechar="'")
+            lista = []
+            for registro in lector_csv:
+                lista.append(self.model.create_from_dict(registro))
+        return lista    
+class DAO_CSV_Director(DAO_CSV):
+    """def todos(self):
         # with open("data/directores.csv","r", newline= "") as fichero:
         with open(self.path, "r", encoding="utf-8", newline="") as fichero:
             lector_csv = csv.DictReader(fichero, delimiter=";", quotechar="'")
             lista = []
             for registro in lector_csv:
                 lista.append(Director.create_from_dict(registro))
-        return lista
+        return lista"""
+    model = Director
 class DAO_CSV_Pelicula(DAO_CSV):
-    def todos(self):
+    """def todos(self):
         with open(self.path, "r", encoding="utf-8", newline="") as fichero:
             lector_csv = csv.DictReader(fichero, delimiter=";", quotechar="'")
             lista = []
             for registro in lector_csv:
                 lista.append(Pelicula.create_from_dict(registro))
-        return lista
+        return lista"""
+    model = Pelicula
