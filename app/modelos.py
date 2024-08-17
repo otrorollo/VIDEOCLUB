@@ -32,7 +32,6 @@ class Director:
     def __hash__(self):
         return hash((self.id, self.nombre))
 
-
 class Pelicula:
     @classmethod
     def create_from_dict(cls, diccionario):
@@ -80,7 +79,6 @@ class Pelicula:
     def __repr__(self):
         return f"Pelicula ({self.id}): {self.titulo}, {self.director}"
 
-
 class DAO(ABC):
     """
     #def __init__(self, *args)
@@ -108,7 +106,6 @@ class DAO(ABC):
         pass
         # raise NotImplementedError("No se debe usar DAO, es una interfaz")
 
-
 class DAO_CSV(DAO):  # ESTO SE HA QUITADO DE LAS SIGUIENTES CLASS 2 DE ABAJO
     model = None
 
@@ -125,31 +122,28 @@ class DAO_CSV(DAO):  # ESTO SE HA QUITADO DE LAS SIGUIENTES CLASS 2 DE ABAJO
                 lista.append(self.model.create_from_dict(registro))
         return lista
 
-
-class DAO_CSV_Director(DAO_CSV):
-    """def todos(self):
-    # with open("data/directores.csv","r", newline= "") as fichero:
+"""class DAO_CSV_Director(DAO_CSV):
+    def todos(self): # with open("data/directores.csv","r", newline= "") as fichero:
     with open(self.path, "r", encoding="utf-8", newline="") as fichero:
         lector_csv = csv.DictReader(fichero, delimiter=";", quotechar="'")
         lista = []
         for registro in lector_csv:
             lista.append(Director.create_from_dict(registro))
-    return lista"""
+    return lista
 
     model = Director
+"""
 
-
-class DAO_CSV_Pelicula(DAO_CSV):
-    """def todos(self):
-    with open(self.path, "r", encoding="utf-8", newline="") as fichero:
+"""class DAO_CSV_Pelicula(DAO_CSV):
+    def todos(self):
+        with open(self.path, "r", encoding="utf-8", newline="") as fichero:
         lector_csv = csv.DictReader(fichero, delimiter=";", quotechar="'")
         lista = []
         for registro in lector_csv:
             lista.append(Pelicula.create_from_dict(registro))
-    return lista"""
-
+    return lista
     model = Pelicula
-
+"""
 
 class DAO_SQLite(DAO):
     model = None
@@ -166,39 +160,39 @@ class DAO_SQLite(DAO):
         """
         conn = sqlite3.connect(self.path)
         cur = conn.cursor()
-
         cur.execute(f"select * from {self.tabla}")
-
         nombres = list(map(lambda item: item[0], cur.description))
-
-        lista = self.__rows_to_dictlist(cur.fetchall(), nombres)
-        resultado = []
-        # Evitar este segundo bucle (es segundo porque el primero está en la linea 136) haciendo que
-        # rows_to_dicc... devuelva una lista de Modelos y no una lista de diccionarios
-        for registro in lista:
-            resultado.append(self.model.create_from_dict(registro))
-
+        resultado = self.__rows_to_dictlist(cur.fetchall(), nombres)
         conn.close()
-
         return resultado
 
     def __rows_to_dictlist(self, filas, nombres):
         registros = []
         for fila in filas:
             registro = {}
-            pos = 0
+            pos = 0 #Más explícito, útil si prefieres un control manual del índice, 
+            #Inicializa pos antes de comenzar a iterar sobre los nombres de las columnas
             for nombre in nombres:
                 registro[nombre] = fila[pos]
-                pos += 1
-
+                pos += 1 
+                #Incrementa pos después de cada iteración para asegurarse de que se asignen correctamente los valores de la fila a las claves del diccionario.
             """
             for pos, nombre in enumerate(nombres):
                 registro[nombre] = fila[pos]
             """
-            registros.append(registro)
+            registros.append(self.model.create_from_dict(registro))
         return registros
+    
+class DAO_CSV_Director(DAO_CSV):
+    model = Director
 
+class DAO_CSV_Pelicula(DAO_CSV):
+    model = Pelicula
 
 class DAO_SQLite_Director(DAO_SQLite):
     model = Director
     tabla = "directores"
+
+class DAO_SQLite_Pelicula(DAO_SQLite):
+    model = Pelicula
+    tabla = "peliculas"
