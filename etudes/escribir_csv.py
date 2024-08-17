@@ -9,12 +9,7 @@ fichero.close()  # para que guarde
 
 # AHora con diccionarios
 with open("data/grupos_zoo.csv", "a", newline="") as fichero:
-    escribidor_csv = csv.DictWriter(
-        fichero,
-        fieldnames=["id_grupo", "tipo_entrada", "cantidad_entrada", "subtotal"],
-        delimiter=";",
-        quotechar="'",
-    )
+    escribidor_csv = csv.DictWriter(fichero,fieldnames=["id_grupo", "tipo_entrada", "cantidad_entrada", "subtotal"],delimiter=";", quotechar="'")
     escribidor_csv.writerows([
             {"id_grupo": 1, "tipo_entrada": 3, "cantidad_entrada": 1, "subtotal": 23},
             {"id_grupo": 1, "tipo_entrada": 4, "cantidad_entrada": 1, "subtotal": 18},
