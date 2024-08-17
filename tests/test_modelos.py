@@ -1,4 +1,4 @@
-from app.modelos import Director, DAO_CSV_Director, Pelicula, DAO_CSV_Pelicula
+from app.modelos import Director, DAO_CSV_Director, Pelicula, DAO_CSV_Pelicula, DAO_SQLite_Director
 
 
 def test_create_director():
@@ -72,3 +72,11 @@ def test_dao_peliculas_traer_todos():
         2,
         17,
     )
+
+def test_dao_directores_sqlite_traer_todos():
+    dao = DAO_SQLite_Director("data/films.sqlite")
+
+    directores = dao.todos()
+
+    assert len(directores) == 76
+    assert directores[7] == Director("Charlie Chaplin", 8)
