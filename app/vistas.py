@@ -32,9 +32,9 @@ class VistaCatalogo:
                 self.__cls()
                 contador = 0
 
-            locate(self.x, self.y + 2 + contador, pelicula.titulo)
-            locate(self.x + 15, self.y + 2 + contador, f"| {pelicula.director.nombre}")
-            locate(self.x + 30, self.y + 2 + contador, f"| {pelicula.sinopsis}")
+            locate(self.x, self.y + 2 + contador, pelicula.titulo[:14])
+            locate(self.x + 15, self.y + 2 + contador, f"| {pelicula._id_director}")
+            locate(self.x + 30, self.y + 2 + contador, f"| {pelicula.sinopsis[:30]}")
             contador += 1
 
 
